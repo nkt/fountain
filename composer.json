@@ -1,0 +1,36 @@
+{
+  "name": "fountain/orm",
+  "description": "ORM based on data-mapper pattern",
+  "keywords": ["orm", "sql", "data-mapper", "query-builder"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nikita Gusakov",
+      "email": "dev@nkt.me"
+    }
+  ],
+  "require": {
+    "php": "~5.4",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "ext-json": "*",
+    "symfony/yaml": "~2.3",
+    "phpunit/phpunit": "~4.0",
+    "satooshi/php-coveralls": "dev-master"
+  },
+  "suggest": {
+    "ext-json": "Allow use json for schema",
+    "symfony/yaml": "Allow use yaml for schema"
+  },
+  "autoload": {
+    "psr-4": {
+      "Fountain\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    }
+  }
+}
