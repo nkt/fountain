@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Fountain\Connection;
 
 /**
- * @author Gusakov Nikita <dev@nkt.me>
+ * @author Nikita Gusakov <dev@nkt.me>
  */
 interface Connection
 {
@@ -16,6 +15,15 @@ interface Connection
      * @return Statement
      */
     public function prepare($sql);
+
+    /**
+     * Prepares a statement for execution, execute it and returns a Statement object.
+     *
+     * @param string $sql
+     *
+     * @return Statement
+     */
+    public function query();
 
     /**
      * Returns the ID of the last inserted row or sequence value.

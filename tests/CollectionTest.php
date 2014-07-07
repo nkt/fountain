@@ -2,11 +2,6 @@
 
 namespace Fountain\Test;
 
-function squaring($a)
-{
-    return $a * $a;
-}
-
 use Fountain\Collection;
 
 /**
