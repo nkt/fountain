@@ -5,32 +5,62 @@ namespace Fountain\Schema;
 /**
  * @author Nikita Gusakov <dev@nkt.me>
  */
-abstract class Schema implements \Serializable
+abstract class Schema
 {
     /**
      * @var string
      */
     protected $name;
-    private $data;
+    /**
+     * @var string
+     */
+    protected $charset = 'UTF-8';
 
-    public function serialize()
+    public static function fromArray(array $schema)
     {
-        // TODO: Implement serialize() method.
+        if (!isset($schema['name'])) {
+            throw new \InvalidArgumentException('Schema requires name');
+        }
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
-     *
-     * @param string $serialized <p>
-     *                           The string representation of the object.
-     *                           </p>
-     *
-     * @return void
+     * @param string $name
      */
-    public function unserialize($serialized)
+    public function setName($name)
     {
-        // TODO: Implement unserialize() method.
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $charset
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    protected function generateIdentifier(array $columns, $prefix = null, $length = 30)
+    {
+        if ($prefix != null) {
+            array_unshift($columns, $prefix);
+        }
+
+        return substr(join('_', $columns), 0, $length);
     }
 }
