@@ -76,4 +76,13 @@ class PdoConnection extends \PDO implements Connection
             throw Exception::createFromPrevious($e);
         }
     }
+
+    public function lastInsertId($name = null)
+    {
+        try {
+            return parent::lastInsertId($name);
+        } catch (\PDOException $e) {
+            throw Exception::createFromPrevious($e);
+        }
+    }
 }
