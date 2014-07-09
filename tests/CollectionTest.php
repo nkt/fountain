@@ -132,6 +132,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(6, $collection);
     }
 
+    public function testKeys()
+    {
+        $collection = new Collection(range(1, 5));
+
+        $this->assertSame(range(0, 4), $collection->keys());
+
+        $collection = new Collection(['foo' => 'bar']);
+
+        $this->assertSame(['foo'], $collection->keys());
+    }
+
     public function testEmpty()
     {
         $collection = new Collection();
@@ -237,5 +248,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertEquals(range(1, 10), $collection->toArray());
+    }
+
+    public function testJsonSerializable()
+    {
+        $array = ['foo' => 'bar'];
+        $collection = new Collection($array);
+
+        $this->assertJsonStringEqualsJsonString(json_encode($array), json_encode($collection));
     }
 }
