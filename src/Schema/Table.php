@@ -63,7 +63,8 @@ class Table extends Schema
             'charset'     => null
         ], $schema);
 
-        $columns = [];
+        $table = new Table($schema['name'], [], [], [], $schema['options'], $schema['charset']);
+
         foreach ($schema['columns'] as $key => $column) {
             if (is_string($key)) {
                 if (is_string($column)) {
@@ -75,14 +76,27 @@ class Table extends Schema
                     $column['name'] = $key;
                 }
             }
-            $columns[] = Column::fromArray($column);
+            $table->addColumn(Column::fromArray($column));
+        }
+        foreach ($schema['indexes'] as $key => $index) {
+            if (is_string($index)) {
+                $index = ['columns' => [$index]];
+            } elseif (!isset($index['columns'])) {
+                $index = ['columns' => $index];
+            }
+            if (is_string($key) && !isset($index['name'])) {
+                $index['name'] = $key;
+            }
+            foreach ($index['columns'] as $column) {
+                if (!$table->hasColumn($column)) {
+                    throw new Exception('Table schema not describe column named ' . $column);
+                }
+            }
+
+            $table->addIndex(Index::fromArray($index));
         }
 
-        return new Table($schema['name'], $columns, array_map(function (array $schema) {
-            return Index::fromArray($schema);
-        }, $schema['indexes']), array_map(function (array $schema) {
-            return ForeignKey::fromArray($schema);
-        }, $schema['foreignKeys']), $schema['options'], $schema['charset']);
+        return $table;
     }
 
     public function getColumns()
@@ -93,6 +107,11 @@ class Table extends Schema
     public function addColumn(Column $column)
     {
         $this->columns[$column->getName()] = $column;
+    }
+
+    public function hasColumn($name)
+    {
+        return isset($this->columns[$name]);
     }
 
     public function removeColumn(Column $column)

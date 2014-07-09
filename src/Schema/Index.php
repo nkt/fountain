@@ -8,7 +8,7 @@ namespace Fountain\Schema;
 class Index extends Schema
 {
     /**
-     * @var Column[]
+     * @var string[]
      */
     private $columns = [];
     /**
@@ -17,7 +17,7 @@ class Index extends Schema
     private $type = 'index';
 
     /**
-     * @param Column[] $columns
+     * @param string[] $columns
      * @param string   $name
      * @param int      $type
      */
@@ -36,19 +36,43 @@ class Index extends Schema
     }
 
     /**
-     * @param Column $column
+     * {@inheritdoc}
      */
-    public function addColumn(Column $column)
+    static public function fromArray(array $schema)
     {
-        $this->columns[$column->getName()] = $column;
+        $schema = array_replace($schema, [
+            'name'    => null,
+            'columns' => [],
+            'type'    => null
+        ]);
+
+        return new Index($schema['columns'], $schema['name'], $schema['type']);
     }
 
     /**
-     * @return Column[]
+     * @param string $column
+     */
+    public function addColumn($column)
+    {
+        $this->columns[$column] = true;
+    }
+
+    /**
+     * @return string[]
      */
     public function getColumns()
     {
-        return $this->columns;
+        return array_keys($this->columns);
+    }
+
+    /**
+     * @param string $column
+     *
+     * @return bool
+     */
+    public function hasColumn($column)
+    {
+        return isset($this->columns[$column]);
     }
 
     /**

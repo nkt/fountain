@@ -10,7 +10,7 @@ class Database extends Schema
     /**
      * @var Table[]
      */
-    private $tables = [];
+    protected $tables = [];
 
     /**
      * @param string  $name
@@ -48,12 +48,11 @@ class Database extends Schema
      * @param string $name
      *
      * @return Table
-     * @throws \InvalidArgumentException
      */
     public function getTable($name)
     {
         if (!isset($this->tables[$name])) {
-            throw new \InvalidArgumentException('There is no table named ' . $name);
+            throw new Exception('There is no table named ' . $name);
         }
 
         return $this->tables[$name];

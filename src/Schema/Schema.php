@@ -19,7 +19,7 @@ abstract class Schema
     public static function fromArray(array $schema)
     {
         if (!isset($schema['name'])) {
-            throw new \InvalidArgumentException('Schema requires name');
+            throw new Exception('Schema requires name');
         }
     }
 
