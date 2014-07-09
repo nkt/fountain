@@ -34,4 +34,17 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', $this->schema->getCharset());
     }
+
+    public function testFromArray()
+    {
+        $this->schema->fromArray(['name' => 'foo']);
+    }
+
+    /**
+     * @expectedException \Fountain\Schema\Exception
+     */
+    public function testFromArrayError()
+    {
+        $this->schema->fromArray([]);
+    }
 }
