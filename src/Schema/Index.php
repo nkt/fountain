@@ -23,16 +23,19 @@ class Index extends Schema
      */
     public function __construct(array $columns, $name = null, $type = null)
     {
+        if (empty($columns)) {
+            throw new Exception('Index should contains at least one column');
+        }
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
-        if ($name === null) {
-            $name = $this->generateIdentifier($columns);
-        }
-        $this->setName($name);
         if ($type !== null) {
             $this->setType($type);
         }
+        if ($name === null) {
+            $name = $this->generateIdentifier($columns, $this->getType());
+        }
+        $this->setName($name);
     }
 
     /**
@@ -40,11 +43,11 @@ class Index extends Schema
      */
     static public function fromArray(array $schema)
     {
-        $schema = array_replace($schema, [
+        $schema = array_replace([
             'name'    => null,
             'columns' => [],
             'type'    => null
-        ]);
+        ], $schema);
 
         return new Index($schema['columns'], $schema['name'], $schema['type']);
     }
