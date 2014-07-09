@@ -10,7 +10,7 @@ class Column extends Schema
     /**
      * @var string
      */
-    protected $type;
+    protected $type = 'string';
     /**
      * @var int
      */
