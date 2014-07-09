@@ -18,10 +18,10 @@ class PdoStatement extends \PDOStatement implements Statement
         }
     }
 
-    public function bindValue($parameter, $value, $type = \PDO::PARAM_STR)
+    public function bindValue($parameter, $value, $type = null)
     {
         try {
-            parent::bindValue($parameter, $value, $type);
+            parent::bindValue($parameter, $value, $type === null ? \PDO::PARAM_STR : $type);
 
             return $this;
         } catch (\PDOException$e) {
