@@ -113,17 +113,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('bar', $column->getComment());
     }
 
-    public function testOptions()
-    {
-        $column = new Column('foo');
-
-        $this->assertSame([], $column->getOptions());
-
-        $column->setOptions(['foo' => 'bar']);
-
-        $this->assertSame(['foo' => 'bar'], $column->getOptions());
-    }
-
     /**
      * @dataProvider provideSchema
      */

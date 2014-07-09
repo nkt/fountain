@@ -15,6 +15,10 @@ abstract class Schema
      * @var string
      */
     protected $charset = 'UTF-8';
+    /**
+     * @var array
+     */
+    protected $options = [];
 
     public static function fromArray(array $schema)
     {
@@ -53,6 +57,22 @@ abstract class Schema
     public function getCharset()
     {
         return $this->charset;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     protected function generateIdentifier(array $columns, $prefix = null, $length = 30)

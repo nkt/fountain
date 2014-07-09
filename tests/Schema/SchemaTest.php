@@ -35,6 +35,15 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->schema->getCharset());
     }
 
+    public function testOptions()
+    {
+        $this->assertEquals([], $this->schema->getOptions());
+
+        $this->schema->setOptions(['foo' => 'bar']);
+
+        $this->assertEquals(['foo' => 'bar'], $this->schema->getOptions());
+    }
+
     public function testFromArray()
     {
         $this->schema->fromArray(['name' => 'foo']);

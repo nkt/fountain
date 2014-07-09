@@ -35,10 +35,6 @@ class Column extends Schema
      * @var string
      */
     protected $comment;
-    /**
-     * @var array
-     */
-    protected $options = [];
 
     /**
      * @param string $name
@@ -160,22 +156,6 @@ class Column extends Schema
     public function isNullable()
     {
         return $this->nullable;
-    }
-
-    /**
-     * @param array $options
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 
     /**

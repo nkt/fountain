@@ -19,10 +19,6 @@ class Table extends Schema
      * @var ForeignKey[]
      */
     protected $foreignKeys = [];
-    /**
-     * @var array
-     */
-    protected $options = [];
 
     /**
      * @param string       $name
@@ -44,9 +40,7 @@ class Table extends Schema
         foreach ($foreignKeys as $key) {
             $this->addForeignKey($key);
         }
-        foreach ($options as $key => $value) {
-            $this->setOption($key, $value);
-        }
+        $this->setOptions($options);
         if ($charset !== null) {
             $this->setCharset($charset);
         }
@@ -147,15 +141,5 @@ class Table extends Schema
     public function removeForeignKey(ForeignKey $index)
     {
         unset($this->foreignKeys[$index->getName()]);
-    }
-
-    public function setOption($key, $value)
-    {
-        $this->options[$key] = $value;
-    }
-
-    public function getOptions()
-    {
-        return $this->options;
     }
 }

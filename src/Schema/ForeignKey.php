@@ -23,10 +23,6 @@ class ForeignKey extends Schema
      * @var Column[]
      */
     protected $foreignColumns;
-    /**
-     * @var array
-     */
-    protected $options = [];
 
     /**
      * @param Column[] $localColumns
@@ -54,21 +50,5 @@ class ForeignKey extends Schema
     public function getLocalTable()
     {
         return $this->localTable;
-    }
-
-    /**
-     * @param array $options
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 }
