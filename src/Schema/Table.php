@@ -21,14 +21,13 @@ class Table extends Schema
     protected $foreignKeys = [];
 
     /**
-     * @param string       $name
-     * @param Column[]     $columns
-     * @param Index[]      $indexes
-     * @param ForeignKey[] $foreignKeys
-     * @param array        $options
-     * @param string       $charset
+     * @param string   $name
+     * @param Column[] $columns
+     * @param Index[]  $indexes
+     * @param array    $options
+     * @param string   $charset
      */
-    public function __construct($name, array $columns = [], array $indexes = [], array $foreignKeys = [], array $options = [], $charset = null)
+    public function __construct($name, array $columns = [], array $indexes = [], array $options = [], $charset = null)
     {
         $this->setName($name);
         foreach ($columns as $column) {
@@ -36,9 +35,6 @@ class Table extends Schema
         }
         foreach ($indexes as $index) {
             $this->addIndex($index);
-        }
-        foreach ($foreignKeys as $key) {
-            $this->addForeignKey($key);
         }
         $this->setOptions($options);
         if ($charset !== null) {
@@ -50,14 +46,13 @@ class Table extends Schema
     {
         parent::fromArray($schema);
         $schema = array_replace([
-            'columns'     => [],
-            'indexes'     => [],
-            'foreignKeys' => [],
-            'options'     => [],
-            'charset'     => null
+            'columns' => [],
+            'indexes' => [],
+            'options' => [],
+            'charset' => null
         ], $schema);
 
-        $table = new Table($schema['name'], [], [], [], $schema['options'], $schema['charset']);
+        $table = new Table($schema['name'], [], [], $schema['options'], $schema['charset']);
 
         foreach ($schema['columns'] as $key => $column) {
             if (is_string($key)) {
@@ -73,29 +68,17 @@ class Table extends Schema
             $table->addColumn(Column::fromArray($column));
         }
         foreach ($schema['indexes'] as $key => $index) {
-            if (is_string($index)) {
-                $index = ['columns' => [$index]];
-            } elseif (!isset($index['columns'])) {
+            if (is_string($index) || !isset($index['columns'])) {
                 $index = ['columns' => $index];
             }
+            $index['columns'] = (array)$index['columns'];
             if (is_string($key) && !isset($index['name'])) {
                 $index['name'] = $key;
             }
-            foreach ($index['columns'] as $column) {
-                if (!$table->hasColumn($column)) {
-                    throw new Exception('Table schema not describe column named ' . $column);
-                }
-            }
-
             $table->addIndex(Index::fromArray($index));
         }
 
         return $table;
-    }
-
-    public function getColumns()
-    {
-        return $this->columns;
     }
 
     public function addColumn(Column $column)
@@ -103,14 +86,35 @@ class Table extends Schema
         $this->columns[$column->getName()] = $column;
     }
 
+    public function removeColumn($name)
+    {
+        $this->assertHasColumn($name);
+        unset($this->columns[$name]);
+    }
+
     public function hasColumn($name)
     {
         return isset($this->columns[$name]);
     }
 
-    public function removeColumn(Column $column)
+    public function getColumns()
     {
-        unset($this->columns[$column->getName()]);
+        return $this->columns;
+    }
+
+    public function addIndex(Index $index)
+    {
+        foreach ($index->getColumns() as $column) {
+            $this->assertHasColumn($column);
+        }
+
+        $this->indexes[$index->getName()] = $index;
+    }
+
+    public function removeIndex($name)
+    {
+        $this->assertHasIndex($name);
+        unset($this->indexes[$name]);
     }
 
     public function getIndexes()
@@ -118,28 +122,17 @@ class Table extends Schema
         return $this->indexes;
     }
 
-    public function addIndex(Index $index)
+    protected function assertHasIndex($name)
     {
-        $this->indexes[$index->getName()] = $index;
+        if (!isset($this->indexes[$name])) {
+            throw new Exception(sprintf('Table "%s" not contains index names "%s"', $this->getName(), $name));
+        }
     }
 
-    public function removeIndex(Index $index)
+    protected function assertHasColumn($name)
     {
-        unset($this->indexes[$index->getName()]);
-    }
-
-    public function getForeignKeys()
-    {
-        return $this->foreignKeys;
-    }
-
-    public function addForeignKey(ForeignKey $key)
-    {
-        $this->foreignKeys[$key->getName()] = $key;
-    }
-
-    public function removeForeignKey(ForeignKey $index)
-    {
-        unset($this->foreignKeys[$index->getName()]);
+        if (!isset($this->columns[$name])) {
+            throw new Exception(sprintf('Table "%s" not contains column names "%s"', $this->getName(), $name));
+        }
     }
 }
