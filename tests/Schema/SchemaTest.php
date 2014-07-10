@@ -44,11 +44,6 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar'], $this->schema->getOptions());
     }
 
-    public function testFromArray()
-    {
-        $this->schema->fromArray(['name' => 'foo']);
-    }
-
     /**
      * @expectedException \Fountain\Schema\Exception
      */
