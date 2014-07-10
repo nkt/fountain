@@ -37,11 +37,12 @@ class Database extends Schema
     }
 
     /**
-     * @param Table $table
+     * @param string $name
      */
-    public function removeTable(Table $table)
+    public function removeTable($name)
     {
-        unset($this->tables[$table->getName()]);
+        $this->assertHasTable($name);
+        unset($this->tables[$name]);
     }
 
     /**
@@ -51,9 +52,7 @@ class Database extends Schema
      */
     public function getTable($name)
     {
-        if (!isset($this->tables[$name])) {
-            throw new Exception('There is no table named ' . $name);
-        }
+        $this->assertHasTable($name);
 
         return $this->tables[$name];
     }
@@ -64,5 +63,15 @@ class Database extends Schema
     public function getTables()
     {
         return $this->tables;
+    }
+
+    /**
+     * @param string $name
+     */
+    protected function assertHasTable($name)
+    {
+        if (!isset($this->tables[$name])) {
+            throw new Exception('There is no table named ' . $name);
+        }
     }
 }
