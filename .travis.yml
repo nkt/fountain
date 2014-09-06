@@ -14,6 +14,7 @@ script:
   - vendor/bin/phpunit --strict --coverage-clover build/logs/clover.xml
 
 after_script:
+  - composer require satooshi/php-coveralls:dev-master
   - vendor/bin/coveralls --exclude-no-stmt
 
 matrix:
